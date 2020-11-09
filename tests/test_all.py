@@ -1,3 +1,4 @@
+"Updated version"
 import numpy as np
 from rapport import build_image_like_tensor, normalize_tensor, sigmoid, softmax
 from rapport import (
