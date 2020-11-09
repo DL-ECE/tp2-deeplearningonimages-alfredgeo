@@ -98,8 +98,9 @@ def build_image_like_tensor(n_rows:int, n_colums: int, n_channels:int, default_v
      It should be containing the default value set by default_value
   """
   
-  res = np.ones((n_rows, n_columns, n_channels), dtype=np.int) * default_value
+  res = np.ones((n_rows, n_colums, n_channels), dtype=np.int) * default_value
   return res
+
 
 
 
@@ -107,7 +108,7 @@ def build_image_like_tensor(n_rows:int, n_colums: int, n_channels:int, default_v
 # Create 3 different tensors with the above function containing different value between [0,255]
 # Uncomment the 3 line below and complete with your answer 
 
-# white_like = build_image_like_tensor(...)
+white_like = build_image_like_tensor(12, 12, 3, 150)
 # gray_like = build_image_like_tensor(...)
 # black_like = build_image_like_tensor(...)
 
@@ -118,8 +119,7 @@ def plot_one_tensor(image_tensor: np.array):
     """Function to plot the image tensor"""
     plt.imshow(image_tensor, cmap='gray')
 
-# +
-# plot_one_tensor(white_like)
+
 
 # +
 # plot_one_tensor(gray_like)
@@ -191,24 +191,30 @@ print(mat_torch[0,3]) # Return first row and 4th column element
 # +
 def normalize_tensor(input_tensor: torch.Tensor) -> torch.Tensor:
     """Apply a normalization to the tensor"""
-    # YOUR CODE HERE
-    NotImplemented
+    return input_tensor / 255.0
    
 
 def sigmoid(input_tensor: torch.Tensor) -> torch.Tensor:
     """Apply a sigmoid to the input Tensor"""
     # YOUR CODE HERE
-    NotImplemented
+    z = 1/(1 + torch.exp(-x))
+    return z
 
 def softmax(input_tensor: torch.Tensor)-> torch.Tensor:
     """Apply a softmax to the input tensor"""
     # YOUR CODE HERE 
-    NotImplemented
+    z = torch.nn.softmax(input_tensor)
+    return z
 
-def target_to_one_hot(target: torch.Tensor) -> torch.Tensor:
+def target_to_one_hot(targets: torch.Tensor, num_classes=10) -> torch.Tensor:
     """Create the one hot representation of the target""" 
-    # YOUR CODE HERE 
-    NotImplemented
+    one_hot = torch.zeros((targets.shape[0], num_classes))
+    for num, target in enumerate(target):
+        one_hot[num, target] =1 
+    return one_hot
+# -
+
+
 
 # +
 # However as mention above pytorch already has some built-ins function 
@@ -598,7 +604,7 @@ def convolution_forward_torch(image, kernel):
 #
 # ##  First let's look at the data.
 
-if __name__ = "__main__" :
+if __name__ == "__main__" :
 
   fmnist_train = FashionMNIST(os.getcwd(), train=True, download=True, transform=transforms.ToTensor())
   fmnist_train = DataLoader(fmnist_train, batch_size=32, num_workers=4, pin_memory=True)
@@ -740,12 +746,12 @@ if __name__ == "__main__":
 #
 # In the cell below your can load a image to the notebook and use the given network to have the segmentation mask and plot it. 
 
-if __name__ = "__main__" :
+if __name__ == "__main__" :
     
     # TODO HERE: Upload an image to the notebook in the navigation bar on the left
     # `File` `Load File`and load an image to the notebook. 
     
-    filename = "" 
+    filename = "out.txt" 
     # Loading a already trained network in pytorch 
     model = torch.hub.load('pytorch/vision:v0.6.0', 'deeplabv3_resnet101', pretrained=True)
     model.eval()
